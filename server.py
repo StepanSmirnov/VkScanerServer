@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
+import os
 
 class MyRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -30,7 +31,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                                 <p>{}</p>\
                         </body>\
                         </html>".format(header, token), "utf-8"))
-
-server = HTTPServer(("213.87.154.175",80), MyRequestHandler)
+port = int(os.environ.get("PORT", 5000)
+server = HTTPServer(("0.0.0.0",port), MyRequestHandler)
 print("server started")
 server.serve_forever()
