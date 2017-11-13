@@ -31,6 +31,6 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                         </body>\
                         </html>".format(header, token), "utf-8"))
 
-server = HTTPServer(("localhost",80), MyRequestHandler)
+server = HTTPServer(("54.235.194.68",80), MyRequestHandler)
 print("server started")
 server.serve_forever()
