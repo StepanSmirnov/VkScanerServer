@@ -23,7 +23,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             url = "https://oauth.vk.com/access_token"
             params = {"client_id": "6258947",
                       "client_secret" : "7m6jlVFSkE4QgWT3528l",
-                      "redirect_uri" : "https://safe-everglades-40623.herokuapp.com/",
+                      "redirect_uri" : "https://safe-everglades-40623.herokuapp.com",
                       "code" : args["code"][0]
                       }
             response = requests.get(url, params = params)
