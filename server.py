@@ -21,8 +21,8 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         if "code" in args:
             header = "Your access_token is"
             url = "https://oauth.vk.com/access_token"
-            params = {"client_id": "6222407",
-                      "client_secret" : "ODTeys6TQsNU9geZtcZ7",
+            params = {"client_id": "6258947",
+                      "client_secret" : "7m6jlVFSkE4QgWT3528l",
                       "redirect_uri" : "https://safe-everglades-40623.herokuapp.com/",
                       "code" : args["code"][0]
                       }
