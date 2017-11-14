@@ -29,6 +29,8 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             response = requests.get(url, params = params)
             print("response_url:".format(response.url))
             token = response.json()
+            if "access_token" in token:
+                token = token["access_token"]
             print("token:{}".format(token))
         
         self.wfile.write(bytes("<!DOCTYPE html>\
