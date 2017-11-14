@@ -26,9 +26,10 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                       "redirect_uri" : "https://safe-everglades-40623.herokuapp.com/",
                       "code" : args["code"][0]
                       }
-            response = requests.get(url, params = params).json()
-            print(response.url)
-            token = response
+            response = requests.get(url, params = params)
+            print("response_url:".format(response.url))
+            token = response.json()
+            print("token:{}".format(token))
         
         self.wfile.write(bytes("<!DOCTYPE html>\
                         <html>\
