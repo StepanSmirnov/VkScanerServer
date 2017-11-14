@@ -41,7 +41,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                         </body>\
                         </html>".format(header, token), "utf-8"))
 port = int(os.environ.get("PORT", 5000))
-host = "localhost"#"0.0.0.0"
+host = "0.0.0.0"
 server = HTTPServer((host, port), MyRequestHandler)
 print("server started")
 server.serve_forever()
