@@ -43,7 +43,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 photos = grabber.loadPhotos()
                 labels = []
                 for photo in photos:
-                    lebles.append(scanImage(photo))
+                    labels.append(scanImage(photo))
                 print("labels:{}".format(labels))
         
         self.wfile.write(bytes("<!DOCTYPE html>\
