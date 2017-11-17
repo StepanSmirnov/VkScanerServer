@@ -12,7 +12,7 @@ from PIL import Image
 
 sys.path.append("..")
 
-from VkScanerServer.utils import label_map_util
+from utils import label_map_util
 
 DIR = os.path.dirname(__file__)
 MODEL_NAME = os.path.join(DIR, 'ssd_mobilenet_v1_coco_11_06_2017')
