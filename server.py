@@ -41,6 +41,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 token = token["access_token"]
                 grabber = PhotoGrabber(token)
                 photos = grabber.loadPhotos()
+                labels = []
+                for photo in photos:
+                    lebles.append(scanImage(photo))
                 print("token:{}".format(token))
         
         self.wfile.write(bytes("<!DOCTYPE html>\
@@ -52,7 +55,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                                 <h1>{}</h1>\
                                 <p>{}</p>\
                         </body>\
-                        </html>".format(header, token), "utf-8"))
+                        </html>".format(header, lebles), "utf-8"))
 port = int(os.environ.get("PORT", 5000))
 host = "0.0.0.0"
 server = HTTPServer((host, port), MyRequestHandler)
