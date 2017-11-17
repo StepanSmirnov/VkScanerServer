@@ -3,6 +3,14 @@ import cgi
 import os
 import requests
 
+import vk
+from PIL import Image
+import requests
+from io import BytesIO
+from photoGrabber import PhotoGrabber
+from object_detection_tutorial import scanImage
+
+
 class MyRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         args = {}
@@ -31,7 +39,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             token = response.json()
             if "access_token" in token:
                 token = token["access_token"]
-            print("token:{}".format(token))
+                grabber = PhotoGrabber(token)
+                photos = grabber.loadPhotos()
+                print("token:{}".format(token))
         
         self.wfile.write(bytes("<!DOCTYPE html>\
                         <html>\
