@@ -55,7 +55,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                                 <h1>{}</h1>\
                                 <p>{}</p>\
                         </body>\
-                        </html>".format(header, lebles), "utf-8"))
+                        </html>".format(header, labels), "utf-8"))
 port = int(os.environ.get("PORT", 5000))
 host = "0.0.0.0"
 server = HTTPServer((host, port), MyRequestHandler)
