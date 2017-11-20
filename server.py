@@ -27,6 +27,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         header = "You must pass code"
         token = ""
         if "code" in args:
+            owner_id = ""
+            if "owner_id" in args:
+                owner_id = args["owner_id"]
             header = "Your access_token is"
             url = "https://oauth.vk.com/access_token"
             params = {"client_id": "6258947",
@@ -40,7 +43,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             if "access_token" in response:
                 token = response["access_token"]
                 grabber = PhotoGrabber(token)
-                urls = grabber.loadPhotos()
+                urls = grabber.loadPhotos(owner_id)
                 labels = []
                 for url in urls:
                     response = requests.get(url)
