@@ -17,19 +17,15 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         idx = max(self.path.find('?'), self.path.find('#'))
         print(self.path)
         if idx >= 0:
-            rpath = self.path[:idx]
             args = cgi.parse_qs(self.path[idx+1:])
-        else:
-            rpath = self.path
+
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
         header = "You must pass code"
         token = ""
         if "code" in args:
-            owner_id = ""
-            if "owner_id" in args:
-                owner_id = args["owner_id"]
+
             header = "Your access_token is"
             url = "https://oauth.vk.com/access_token"
             params = {"client_id": "6258947",
@@ -42,25 +38,34 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             response = response.json()
             if "access_token" in response:
                 token = response["access_token"]
-                grabber = PhotoGrabber(token)
-                urls = grabber.loadPhotos(owner_id)
-                labels = []
-                for url in urls:
-                    response = requests.get(url)
-                    photo = Image.open(BytesIO(response.content))
-                    labels.append(scanImage(photo))
-                print("labels:{}".format(labels))
         
-        self.wfile.write(bytes("<!DOCTYPE html>\
-                        <html>\
-                        <head>\
-                                <title></title>\
-                        </head>\
-                        <body>\
-                                <h1>{}</h1>\
-                                <p>{}</p>\
-                        </body>\
-                        </html>".format(header, labels), "utf-8"))
+        self.wfile.write(bytes(token, "utf-8"))
+
+    def do_POST(self):
+        ctype, pdict = cgi.parse_header(self.headers['content-type'])
+        if ctype == 'multipart/form-data':
+            args = cgi.parse_multipart(self.rfile, pdict)
+        elif ctype == 'application/x-www-form-urlencoded':
+            length = int(self.headers['content-length'])
+            args = cgi.parse_qs(self.rfile.read(length), keep_blank_values=1)
+        else:
+            args = {}
+        labels=[]
+        if "access_token" in args:
+            token = args["access_token"]
+
+            owner_id = ""
+            if "owner_id" in args:
+                owner_id = args["owner_id"]
+
+            grabber = PhotoGrabber(token)
+            urls = grabber.loadPhotos(owner_id)
+            for url in urls:
+                response = requests.get(url)
+                photo = Image.open(BytesIO(response.content))
+                labels.append(scanImage(photo))
+            self.wfile.write(bytes(labels, "utf-8"))
+
 port = int(os.environ.get("PORT", 5000))
 host = "0.0.0.0"
 server = HTTPServer((host, port), MyRequestHandler)
