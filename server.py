@@ -36,13 +36,15 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                       }
             response = requests.get(url, params = params)
             print("response_url:".format(response.url))
-            token = response.json()
-            if "access_token" in token:
-                token = token["access_token"]
+            response = response.json()
+            if "access_token" in response:
+                token = response["access_token"]
                 grabber = PhotoGrabber(token)
-                photos = grabber.loadPhotos()
+                urls = grabber.loadPhotos()
                 labels = []
-                for photo in photos:
+                for url in urls:
+                    response = requests.get(url["src"])
+                    photo = Image.open(BytesIO(response.content))
                     labels.append(scanImage(photo))
                 print("labels:{}".format(labels))
         
