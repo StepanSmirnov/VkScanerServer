@@ -43,7 +43,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 urls = grabber.loadPhotos()
                 labels = []
                 for url in urls:
-                    response = requests.get(url["src"])
+                    response = requests.get(url)
                     photo = Image.open(BytesIO(response.content))
                     labels.append(scanImage(photo))
                 print("labels:{}".format(labels))
