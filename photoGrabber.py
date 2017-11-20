@@ -13,7 +13,7 @@ class PhotoGrabber:
         session = vk.Session()
         vkapi = vk.API(access_token=self.token, session = session)
         id = vkapi.users.get(user_ids=owner_id)[0]["uid"]
-        response = vkapi.photos.getAll(owner_id = id)[1:]:
+        response = vkapi.photos.getAll(owner_id = id)[1:]
         # print(url)
         # response = requests.get(url["src"])
         # images.append(Image.open(BytesIO(response.content)))
