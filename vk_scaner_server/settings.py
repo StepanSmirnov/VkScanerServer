@@ -25,7 +25,7 @@ SECRET_KEY = '+p=o3cdknzj=pbtc)$4tm^(4&!q&5tfce##rc1z8bre^=)w9av'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['safe-everglades-40623.herokuapp.com']
+ALLOWED_HOSTS = ['safe-everglades-40623.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -54,7 +54,7 @@ ROOT_URLCONF = 'vk_scaner_server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["scaner/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
