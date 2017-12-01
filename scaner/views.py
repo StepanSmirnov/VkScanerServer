@@ -2,9 +2,14 @@ from django.shortcuts import render
 import requests
 from django.contrib.auth.models import User
 from scaner.models import Profile
-import vk
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+import vk
+from PIL import Image
+import requests
+from io import BytesIO
+from photoGrabber import PhotoGrabber
+from object_detection_tutorial import scanImage
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -42,6 +47,15 @@ def login(request):
     #     return render(request, "index.html")
 
 def create(request):
+    token = request.session.get("access_token", "")
+    labels = []
     target_id = request.POST['target_id']
-    context = {'target_id': target_id}
+    if token != "":
+        grabber = PhotoGrabber(token)
+        urls = grabber.loadPhotos(target_id)
+        for url in urls:
+            response = requests.get(url)
+            photo = Image.open(BytesIO(response.content))
+            labels.append(scanImage(photo))
+    context = {'target_id': labels}
     return render(request, 'show.html', context)
