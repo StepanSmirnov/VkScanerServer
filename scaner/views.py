@@ -3,6 +3,7 @@ import requests
 from django.contrib.auth.models import User
 import vk
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -34,8 +35,9 @@ def login(request):
     if user is not None:
         login(request, user)
         context = {'access_token': token}
-        return render(request, 'login.html', context)
+        return render(request, 'new.html', context)
 
-@login_required
-def create(target_id):
-    pass
+def create(request):
+    target_id = request.POST['target_id']
+    context = {'target_id': target_id}
+    return render(request, 'show.html', context)
