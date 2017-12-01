@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import requests
 from django.contrib.auth.models import User
+from scaner.models import Profile
 import vk
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -26,15 +27,19 @@ def login(request):
     session = vk.Session()
     vkapi = vk.API(access_token=token, session = session)
     id = str(vkapi.users.get()[0]["uid"])
-    if (User.objects.filter(username=id).count() == 0):
-        user = User.objects.create_user(id, "")
-        user.profile.access_token = token
-        user.save()
-    user = authenticate(username=id, password="")
-    if user is not None:
-        login(request, user)
-        context = {'access_token': token}
-        return render(request, 'new.html', context)
+    request.session["vk_uid"]=id
+    request.session["access_token"] = token
+    # if (User.objects.filter(username=id).count() == 0):
+    #     user = User.objects.create_user(username=id, password="")
+    #     user.profile.access_token = token
+    #     user.save()
+    # user = authenticate(username=id, password="")
+    # if user is not None:
+    #     login(request, user)
+    context = {'access_token': token}
+    return render(request, 'new.html', context)
+    # else:
+    #     return render(request, "index.html")
 
 def create(request):
     target_id = request.POST['target_id']
