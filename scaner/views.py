@@ -1,6 +1,8 @@
 from django.shortcuts import render
 import requests
-
+from django.contrib.auth.models import User
+import vk
+from django.contrib.auth import authenticate, login
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -20,5 +22,20 @@ def login(request):
     if "access_token" in response:
         token = response["access_token"]
 
-    context = {'access_token': token}
-    return render(request, 'login.html', context)
+    session = vk.Session()
+    vkapi = vk.API(access_token=token, session = session)
+    id = str(vkapi.users.get()[0]["uid"])
+    user = User.objects.get(username=id)
+    if (user is None):
+        user = User.objects.create_user(id, "")
+        user.profile.access_token = token
+        user.save()
+    user = authenticate(username=id, password="")
+    if user is not None:
+        login(request, user)
+        context = {'access_token': token}
+        return render(request, 'login.html', context)
+
+@login_required
+def create(target_id):
+    pass
