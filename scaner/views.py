@@ -26,8 +26,7 @@ def login(request):
     session = vk.Session()
     vkapi = vk.API(access_token=token, session = session)
     id = str(vkapi.users.get()[0]["uid"])
-    user = User.objects.get(username=id)
-    if (user is None):
+    if (User.objects.filter(username=id).count() == 0):
         user = User.objects.create_user(id, "")
         user.profile.access_token = token
         user.save()
