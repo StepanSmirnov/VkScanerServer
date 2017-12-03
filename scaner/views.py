@@ -68,7 +68,7 @@ def create(request):
     c = Counter(labels)
     fig1, ax1 = plt.subplots()
     ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-    buffer = StringIO.StringIO()
+    buffer = StringIO()
     canvas = plt.get_current_fig_manager().canvas
     canvas.draw()
     pil_image = PIL.Image.fromstring('RGB', canvas.get_width_height(), 
