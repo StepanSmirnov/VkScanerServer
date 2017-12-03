@@ -1,3 +1,2 @@
 db.sqlite3
-scaner/__pycache__/urls.cpython-35.pyc
-scaner/__pycache__/views.cpython-35.pyc
+*.pyc
