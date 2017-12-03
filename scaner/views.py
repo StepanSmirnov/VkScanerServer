@@ -13,7 +13,6 @@ from object_detection_tutorial import scanImage
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
-from io import StringIO
 from collections import Counter
 # Create your views here.
 def index(request):
@@ -68,11 +67,11 @@ def create(request):
     c = Counter(labels)
     fig1, ax1 = plt.subplots()
     ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-    buffer = StringIO()
+    buffer = BytesIO()
     canvas = plt.get_current_fig_manager().canvas
     canvas.draw()
     pil_image = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
-    pil_image.save(buffer, 'PNG')
+    pil_image.(buffer, 'PNG')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
     return HttpResponse(buffer.getvalue(), mimetype='image/png')
