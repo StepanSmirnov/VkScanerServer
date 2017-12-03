@@ -69,6 +69,6 @@ with detection_graph.as_default():
         (boxes, scores, classes, num) = sess.run(
             [detection_boxes, detection_scores, detection_classes, num_detections],
             feed_dict={image_tensor: image_np_expanded})
-        return ([category_index[i[1]["name"]] for i in zip(scores[0], classes[0]) if i[0] > 0.5])
+        return ([category_index[i[1]]["name"] for i in zip(scores[0], classes[0]) if i[0] > 0.5])
 
 
