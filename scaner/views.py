@@ -66,13 +66,18 @@ def create(request):
 
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
-    fig1, ax1 = plt.subplots()
+    fig1 = plt.figure()
+    ax1 = fig.add_subplot(111)
     ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+
+    imgdata = BytesIO()
     buffer = BytesIO()
-    canvas = plt.get_current_fig_manager().canvas
-    canvas.draw()
-    pil_image = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
-    pil_image.save(buffer, 'PNG')
+
+    fig1.savefig(imgdata, format='png')
+    imgdata.seek(0)  # rewind the data
+    im = Image.open(imgdata)
+
+    im.save(buffer, 'PNG')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
     return HttpResponse(buffer.getvalue(), mimetype='image/png')
