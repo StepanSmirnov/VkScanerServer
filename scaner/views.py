@@ -10,6 +10,9 @@ import requests
 from io import BytesIO
 from photoGrabber import PhotoGrabber
 from object_detection_tutorial import scanImage
+from matplotlib import pyplot as plt
+from io import StringIO
+from collections import Counter
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -56,6 +59,21 @@ def create(request):
         for url in urls:
             response = requests.get(url)
             photo = Image.open(BytesIO(response.content))
-            labels.append(scanImage(photo))
-    context = {'target_id': labels}
-    return render(request, 'show.html', context)
+            labels += (scanImage(photo))
+    # context = {'target_id': labels}
+
+    # next 5 lines just create a matplotlib plot
+    c = Counter(labels)
+    fig1, ax1 = plt.subplots()
+    ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+    buffer = StringIO.StringIO()
+    canvas = plt.get_current_fig_manager().canvas
+    canvas.draw()
+    pil_image = PIL.Image.fromstring('RGB', canvas.get_width_height(), 
+                 canvas.tostring_rgb())
+    pil_image.save(buffer, 'PNG')
+    plt.close()
+    # Django's HttpResponse reads the buffer and extracts the image
+    return HttpResponse(buffer.getvalue(), mimetype='image/png')
+
+    # return render(request, 'show.html', context)
