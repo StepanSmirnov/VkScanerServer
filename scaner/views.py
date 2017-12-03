@@ -10,6 +10,8 @@ import requests
 from io import BytesIO
 from photoGrabber import PhotoGrabber
 from object_detection_tutorial import scanImage
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from io import StringIO
 from collections import Counter
