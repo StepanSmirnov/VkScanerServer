@@ -71,8 +71,7 @@ def create(request):
     buffer = StringIO()
     canvas = plt.get_current_fig_manager().canvas
     canvas.draw()
-    pil_image = Image.fromstring('RGB', canvas.get_width_height(), 
-                 canvas.tostring_rgb())
+    pil_image = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
     pil_image.save(buffer, 'PNG')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
