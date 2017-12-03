@@ -71,7 +71,7 @@ def create(request):
     buffer = StringIO()
     canvas = plt.get_current_fig_manager().canvas
     canvas.draw()
-    pil_image = PIL.Image.fromstring('RGB', canvas.get_width_height(), 
+    pil_image = Image.fromstring('RGB', canvas.get_width_height(), 
                  canvas.tostring_rgb())
     pil_image.save(buffer, 'PNG')
     plt.close()
