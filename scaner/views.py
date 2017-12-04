@@ -15,7 +15,7 @@ matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 from collections import Counter
-from djang.http import HttpResponse 
+from django.http import HttpResponse
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
