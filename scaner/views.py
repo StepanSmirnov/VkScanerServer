@@ -4,8 +4,7 @@ from scaner.models import Profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.conf import settings
-from os import path
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 import requests
 import vk
@@ -61,6 +60,7 @@ def create(request):
         grabber = PhotoGrabber(token)
         del token
         urls = grabber.loadPhotos(target_id)
+        del target_id
         for url in urls:
             response = requests.get(url)
             photo = Image.open(BytesIO(response.content))
@@ -68,15 +68,23 @@ def create(request):
             del photo
         del grabber
         del urls
+    # context = {'target_id': labels}
 
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
-    plt.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-    url = path.join(settings.STATIC_ROOT + ,"chart.png")
-    plt.savefig(url, format='png')
+    del labels
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+
+    imgdata = BytesIO()
+
+    fig1.savefig(imgdata, format='png')
+    imgdata.seek(0)  # rewind the data
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
     # response = HttpResponse(content_type='image/png')
     # image.save(response, 'PNG')
-    context = {'chart_src': url}
-    return render(request, 'show.html', context)
+    return HttpResponse(imgdata.getvalue(), content_type='image/png')
+
+    # return render(request, 'show.html', context)
