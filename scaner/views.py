@@ -67,19 +67,15 @@ def create(request):
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
     fig1 = plt.figure()
-    ax1 = fig.add_subplot(111)
+    ax1 = fig1.add_subplot(111)
     ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
 
     imgdata = BytesIO()
-    buffer = BytesIO()
 
     fig1.savefig(imgdata, format='png')
     imgdata.seek(0)  # rewind the data
-    im = Image.open(imgdata)
-
-    im.save(buffer, 'PNG')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
-    return HttpResponse(buffer.getvalue(), mimetype='image/png')
+    return HttpResponse(imgdata.getvalue(), mimetype='image/png')
 
     # return render(request, 'show.html', context)
