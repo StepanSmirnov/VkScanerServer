@@ -72,7 +72,7 @@ def create(request):
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
     plt.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-    url = path.join(settings.BASE_DIR ,"chart.png")
+    url = path.join(settings.STATIC_ROOT + ,"chart.png")
     plt.savefig(url, format='png')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
