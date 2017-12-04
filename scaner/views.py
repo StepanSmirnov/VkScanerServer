@@ -4,7 +4,8 @@ from scaner.models import Profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.conf import settings
+from os import path
 
 import requests
 import vk
@@ -71,7 +72,7 @@ def create(request):
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
     plt.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-    url = static("chart.png")
+    url = path.join(settings.BASE_DIR ,"chart.png")
     plt.savefig(url, format='png')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
