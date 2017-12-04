@@ -1,21 +1,22 @@
 from django.shortcuts import render
-import requests
 from django.contrib.auth.models import User
 from scaner.models import Profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib.staticfiles.templatetags.staticfiles import static
+
+import requests
 import vk
 from PIL import Image
-import requests
 from io import BytesIO
 from photoGrabber import PhotoGrabber
 from object_detection_tutorial import scanImage
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
-
 from collections import Counter
-from django.http import HttpResponse
+
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -47,8 +48,7 @@ def login(request):
     # user = authenticate(username=id, password="")
     # if user is not None:
     #     login(request, user)
-    context = {'access_token': token}
-    return render(request, 'new.html', context)
+    return render(request, 'new.html')
     # else:
     #     return render(request, "index.html")
 
@@ -58,27 +58,24 @@ def create(request):
     target_id = request.POST['target_id']
     if token != "":
         grabber = PhotoGrabber(token)
+        del token
         urls = grabber.loadPhotos(target_id)
         for url in urls:
             response = requests.get(url)
             photo = Image.open(BytesIO(response.content))
             labels += (scanImage(photo))
-    # context = {'target_id': labels}
+            del photo
+        del grabber
+        del urls
 
     # next 5 lines just create a matplotlib plot
     c = Counter(labels)
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
-    ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-
-    imgdata = BytesIO()
-
-    fig1.savefig(imgdata, format='png')
-    imgdata.seek(0)  # rewind the data
+    plt.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+    url = static("chart.png")
+    plt.savefig(url, format='png')
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
     # response = HttpResponse(content_type='image/png')
     # image.save(response, 'PNG')
-    return HttpResponse(imgdata.getvalue(), content_type='image/png')
-
-    # return render(request, 'show.html', context)
+    context = {'chart_src': url}
+    return render(request, 'show.html', context)

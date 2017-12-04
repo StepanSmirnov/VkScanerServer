@@ -1,6 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
 <form action="/scaner/scan/" method="post">
     {% csrf_token %}
     <label for="target_id">Your name: </label>
     <input id="target_id" type="text" name="target_id" value="{{ target_id }}">
     <input type="submit" value="OK">
 </form>
+{% endblock %}
