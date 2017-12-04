@@ -77,6 +77,8 @@ def create(request):
     imgdata.seek(0)  # rewind the data
     plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
-    return HttpResponse(imgdata.getvalue(), mimetype='image/png')
+    # response = HttpResponse(content_type='image/png')
+    # image.save(response, 'PNG')
+    return HttpResponse(imgdata.getvalue(), content_type='image/png')
 
     # return render(request, 'show.html', context)
