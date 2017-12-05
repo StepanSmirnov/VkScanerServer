@@ -17,3 +17,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Person(models.Model):
+    social_id = models.CharField(max_length=250)
+    name = models.CharField(max_length=250)
+    surname = models.CharField(max_length=250)
+    timestamp = models.DateTimeField(auto_now=True)

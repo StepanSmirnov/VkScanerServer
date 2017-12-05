@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from scaner.models import Profile
+from scaner.models import Person
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -68,6 +68,14 @@ def create(request):
             del photo
         del grabber
         del urls
+        if (Person.objects.filter(social_id=target_id).exists()):
+            person = Person.objects.get(social_id=target_id)
+        else:
+            session = vk.Session()
+            vkapi = vk.API(access_token=self.token, session = session)
+            params = vkapi.users.get(user_ids=owner_id)[0]
+            person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
+        person.save()
     # context = {'target_id': labels}
 
     # next 5 lines just create a matplotlib plot
