@@ -60,7 +60,6 @@ def create(request):
         grabber = PhotoGrabber(token)
         del token
         urls = grabber.loadPhotos(target_id)
-        del target_id
         for url in urls:
             response = requests.get(url)
             photo = Image.open(BytesIO(response.content))
@@ -76,6 +75,7 @@ def create(request):
             params = vkapi.users.get(user_ids=owner_id)[0]
             person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
         person.save()
+        del target_id
     # context = {'target_id': labels}
 
     # next 5 lines just create a matplotlib plot
