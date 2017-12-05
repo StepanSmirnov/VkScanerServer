@@ -70,7 +70,7 @@ def create(request):
         for url in urls:
             response = requests.get(url)
             image = Image.open(BytesIO(response.content))
-            proto = person.photo_set.create(url=url, labels=scanImage(image))
+            photo = person.photo_set.create(url=url, labels=scanImage(image))
             photo.save()
             labels += photo.labels
             del photo
