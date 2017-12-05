@@ -71,8 +71,8 @@ def create(request):
             response = requests.get(url)
             image = Image.open(BytesIO(response.content))
             photo = person.photo_set.create(url=url, labels=scanImage(image))
-            photo.save()
             labels += photo.labels
+            if (not person.photo_set.filter(url=url).exists()) photo.save()
             del photo
             del image
         person.save()
