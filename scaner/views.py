@@ -71,7 +71,7 @@ def create(request):
         else:
             session = vk.Session()
             vkapi = vk.API(access_token=token, session = session)
-            params = vkapi.users.get(user_ids=owner_id)[0]
+            params = vkapi.users.get(user_ids=target_id)[0]
             person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
         person.save()
         del token
