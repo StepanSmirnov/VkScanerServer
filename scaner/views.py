@@ -68,10 +68,10 @@ def create(request):
         grabber = PhotoGrabber(token)
         urls = grabber.loadPhotos(target_id)
         for url in urls:
-            proto = person.photo_set.create(url=url, labels=scanImage(image))
-            photo.save()
             response = requests.get(url)
             image = Image.open(BytesIO(response.content))
+            proto = person.photo_set.create(url=url, labels=scanImage(image))
+            photo.save()
             labels += photo.labels
             del photo
             del image
