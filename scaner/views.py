@@ -58,7 +58,6 @@ def create(request):
     target_id = request.POST['target_id']
     if token != "":
         grabber = PhotoGrabber(token)
-        del token
         urls = grabber.loadPhotos(target_id)
         for url in urls:
             response = requests.get(url)
@@ -71,10 +70,11 @@ def create(request):
             person = Person.objects.get(social_id=target_id)
         else:
             session = vk.Session()
-            vkapi = vk.API(access_token=self.token, session = session)
+            vkapi = vk.API(access_token=token, session = session)
             params = vkapi.users.get(user_ids=owner_id)[0]
             person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
         person.save()
+        del token
         del target_id
     # context = {'target_id': labels}
 
