@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from scaner.models import Person
-from scaner.models import Photo
+from scanner.models import Person
+from scanner.models import Photo
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -28,7 +28,7 @@ def login(request):
     url = "https://oauth.vk.com/access_token"
     params = {"client_id": "6258947",
                 "client_secret" : "7m6jlVFSkE4QgWT3528l",
-                "redirect_uri" : "https://safe-everglades-40623.herokuapp.com/scaner/login",
+                "redirect_uri" : "https://safe-everglades-40623.herokuapp.com/scanner/login",
                 "code" : code
                 }
     response = requests.get(url, params = params)
