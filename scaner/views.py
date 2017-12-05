@@ -67,6 +67,7 @@ def create(request):
 
         grabber = PhotoGrabber(token)
         urls = grabber.loadPhotos(target_id)
+        person.save()
         for url in urls:
             response = requests.get(url)
             image = Image.open(BytesIO(response.content))
@@ -76,7 +77,7 @@ def create(request):
                 photo.save()
             del photo
             del image
-        person.save()
+        del person
         del grabber
         del urls
         del token
