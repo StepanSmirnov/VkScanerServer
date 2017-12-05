@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from scaner.models import Person
+from scaner.models import Photo
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -35,12 +36,11 @@ def login(request):
     token=""
     if "access_token" in response:
         token = response["access_token"]
-
-    session = vk.Session()
-    vkapi = vk.API(access_token=token, session = session)
-    id = str(vkapi.users.get()[0]["uid"])
-    request.session["vk_uid"]=id
-    request.session["access_token"] = token
+        session = vk.Session()
+        vkapi = vk.API(access_token=token, session = session)
+        id = str(vkapi.users.get()[0]["uid"])
+        request.session["vk_uid"]=id
+        request.session["access_token"] = token
     # if (User.objects.filter(username=id).count() == 0):
     #     user = User.objects.create_user(username=id, password="")
     #     user.profile.access_token = token
@@ -57,15 +57,6 @@ def create(request):
     labels = []
     target_id = request.POST['target_id']
     if token != "":
-        grabber = PhotoGrabber(token)
-        urls = grabber.loadPhotos(target_id)
-        for url in urls:
-            response = requests.get(url)
-            photo = Image.open(BytesIO(response.content))
-            labels += (scanImage(photo))
-            del photo
-        del grabber
-        del urls
         if (Person.objects.filter(social_id=target_id).exists()):
             person = Person.objects.get(social_id=target_id)
         else:
@@ -73,7 +64,20 @@ def create(request):
             vkapi = vk.API(access_token=token, session = session)
             params = vkapi.users.get(user_ids=target_id)[0]
             person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
+
+        grabber = PhotoGrabber(token)
+        urls = grabber.loadPhotos(target_id)
+        for url in urls:
+            proto = person.photo_set.create(url=url, labels=scanImage(image))
+            photo.save()
+            response = requests.get(url)
+            image = Image.open(BytesIO(response.content))
+            labels += photo.labels
+            del photo
+            del image
         person.save()
+        del grabber
+        del urls
         del token
         del target_id
     # context = {'target_id': labels}
