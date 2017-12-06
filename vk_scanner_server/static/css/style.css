@@ -74,6 +74,7 @@ body {
 /* main */
 .main {
 	padding: 25px;
+	min-height: calc(100vh - 97px);
 }
 
 .carusel {
@@ -128,4 +129,25 @@ body {
 
 .footer .col-md12 p {
 	margin-bottom: 0;
+}
+
+.input-page {
+	text-align: center;
+}
+
+.input-page h2 {
+	margin: 35px;
+}
+
+input {
+	min-width: 100px;
+	border: #1e90ff solid 1px;
+	color: #1e90ff;
+	border-radius: 4px;
+	padding: 7px;
+	box-shadow: 0 0 4px gray;
+}
+
+input:hover {
+	box-shadow: 0 0 2px black;
 }

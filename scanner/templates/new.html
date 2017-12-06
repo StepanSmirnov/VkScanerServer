@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="/scanner/scan/" method="post">
-    {% csrf_token %}
-    <label for="target_id">VK id цели: </label>
-    <input id="target_id" type="text" name="target_id" value="{{ target_id }}">
-    <input type="submit" value="OK">
-</form>
+<div class="input-page">
+    <h2>Укажите id пользователя VK</h2>
+    <form action="/scanner/scan/" method="post">
+        {% csrf_token %}
+        <input id="target_id" type="text" name="target_id" value="{{ target_id }}">
+        <input type="submit" value="OK">
+    </form>
+</div>
 {% endblock %}
