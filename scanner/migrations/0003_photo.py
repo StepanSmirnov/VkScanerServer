@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('url', models.CharField(max_length=250)),
                 ('labels', models.TextField()),
-                ('person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scaner.Person')),
+                ('person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scanner.Person')),
             ],
         ),
     ]
