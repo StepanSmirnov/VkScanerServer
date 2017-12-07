@@ -49,7 +49,7 @@ import requests
 from io import BytesIO
 
 FLAGS = None
-model_dir = ""
+model_dir = "/models"
 num_top_predictions = 5
 # pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
