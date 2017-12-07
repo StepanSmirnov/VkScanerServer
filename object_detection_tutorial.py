@@ -59,15 +59,18 @@ with detection_graph.as_default():
     num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
     def scanImage(image):
-        # the array based representation of the image will be used later in order to prepare the
-        # result image with boxes and labels on it.
-        image_np = load_image_into_numpy_array(image)
-        # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-        image_np_expanded = np.expand_dims(image_np, axis=0)
-        # Actual detection.
-        (boxes, scores, classes, num) = sess.run(
-            [detection_boxes, detection_scores, detection_classes, num_detections],
-            feed_dict={image_tensor: image_np_expanded})
-        return ([category_index[i[1]]["name"] for i in zip(scores[0], classes[0]) if i[0] > 0.5])
+        try:
+            # the array based representation of the image will be used later in order to prepare the
+            # result image with boxes and labels on it.
+            image_np = load_image_into_numpy_array(image)
+            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+            image_np_expanded = np.expand_dims(image_np, axis=0)
+            # Actual detection.
+            (boxes, scores, classes, num) = sess.run(
+                [detection_boxes, detection_scores, detection_classes, num_detections],
+                feed_dict={image_tensor: image_np_expanded})
+            return ([category_index[i[1]]["name"] for i in zip(scores[0], classes[0]) if i[0] > 0.5])
+        except ValueError as ex:
+            return []
 
 
