@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import UserUser
 from scanner.models import Person
 from scanner.models import Photo
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth import authenticate, login
+# from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.staticfiles.templatetags.staticfiles import static
 
 import requests
 import vk

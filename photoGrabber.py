@@ -1,8 +1,7 @@
 import vk
-from PIL import Image
-import requests
-from io import BytesIO
-import json
+# from PIL import Image
+# import requests
+# from io import BytesIO
 
 class PhotoGrabber:
     def __init__(self, access_token):
@@ -12,8 +11,7 @@ class PhotoGrabber:
         # images = []
         session = vk.Session()
         vkapi = vk.API(access_token=self.token, session = session)
-        id = vkapi.users.get(user_ids=owner_id)[0]["uid"]
-        response = vkapi.photos.getAll(owner_id = id)[1:]
+        response = vkapi.photos.getAll(owner_id = vkapi.users.get(user_ids=owner_id)[0]["uid"])[1:]
         # print(url)
         # response = requests.get(url["src"])
         # images.append(Image.open(BytesIO(response.content)))
