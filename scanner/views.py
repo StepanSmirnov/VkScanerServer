@@ -43,7 +43,6 @@ def login(request):
     return render(request, 'new.html')
 
 def create(request):
-    maybe_download_and_extract()
     token = request.session.get("access_token", "")
     labels = []
     target_id = request.POST['target_id']
