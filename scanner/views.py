@@ -8,7 +8,6 @@ from django.http import HttpResponse
 
 import requests
 import vk
-from PIL import Image
 from io import BytesIO
 from photoGrabber import PhotoGrabber
 # from object_detection_tutorial import scanImage
@@ -71,8 +70,7 @@ def create(request):
         person.save()
         for url in urls:
             response = requests.get(url)
-            image = Image.open(BytesIO(response.content))
-            photo = person.photo_set.create(url=url, labels=run_inference_on_image(image))
+            photo = person.photo_set.create(url=url, labels=run_inference_on_image(BytesIO(response.content)))
             labels += photo.labels
             if (not person.photo_set.filter(url=url).exists()):
                 photo.save()
