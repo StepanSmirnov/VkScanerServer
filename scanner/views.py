@@ -11,7 +11,8 @@ import vk
 from PIL import Image
 from io import BytesIO
 from photoGrabber import PhotoGrabber
-from object_detection_tutorial import scanImage
+# from object_detection_tutorial import scanImage
+from classify_image import run_inference_on_image, maybe_download_and_extract
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
@@ -52,6 +53,7 @@ def login(request):
     #     return render(request, "index.html")
 
 def create(request):
+    maybe_download_and_extract()
     token = request.session.get("access_token", "")
     labels = []
     target_id = request.POST['target_id']
@@ -70,7 +72,7 @@ def create(request):
         for url in urls:
             response = requests.get(url)
             image = Image.open(BytesIO(response.content))
-            photo = person.photo_set.create(url=url, labels=scanImage(image))
+            photo = person.photo_set.create(url=url, labels=run_inference_on_image(image))
             labels += photo.labels
             if (not person.photo_set.filter(url=url).exists()):
                 photo.save()
