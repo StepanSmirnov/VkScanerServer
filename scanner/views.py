@@ -75,7 +75,6 @@ def create(request):
             if (not person.photo_set.filter(url=url).exists()):
                 photo.save()
             del photo
-            del image
         del person
         del grabber
         del urls
