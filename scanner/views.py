@@ -11,7 +11,7 @@ import vk
 from io import BytesIO
 from photoGrabber import PhotoGrabber
 # from object_detection_tutorial import scanImage
-from classify_image import run_inference_on_image, maybe_download_and_extract
+from classify_image import run_inference_on_image
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
@@ -40,16 +40,7 @@ def login(request):
         id = str(vkapi.users.get()[0]["uid"])
         request.session["vk_uid"]=id
         request.session["access_token"] = token
-    # if (User.objects.filter(username=id).count() == 0):
-    #     user = User.objects.create_user(username=id, password="")
-    #     user.profile.access_token = token
-    #     user.save()
-    # user = authenticate(username=id, password="")
-    # if user is not None:
-    #     login(request, user)
     return render(request, 'new.html')
-    # else:
-    #     return render(request, "index.html")
 
 def create(request):
     maybe_download_and_extract()

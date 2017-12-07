@@ -35,7 +35,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import argparse
 import os.path
 import re
 import sys
@@ -45,11 +44,8 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
-import requests
-from io import BytesIO
 from django.conf import settings
 
-FLAGS = None
 model_dir = os.path.join(settings.BASE_DIR, "models")
 num_top_predictions = 5
 # pylint: disable=line-too-long
@@ -132,8 +128,11 @@ def create_graph():
     _ = tf.import_graph_def(graph_def, name='')
 
 
+create_graph()
+node_lookup = NodeLookup()
+
 def run_inference_on_image(image_data):
-  """Runs inference on an image.
+      """Runs inference on an image.
 
   Args:
     image: Image file name.
@@ -146,7 +145,6 @@ def run_inference_on_image(image_data):
   # image_data = tf.gfile.FastGFile(image, 'rb').read()
 
   # Creates graph from saved GraphDef.
-  create_graph()
 
   with tf.Session() as sess:
     # Some useful tensors:
@@ -158,13 +156,11 @@ def run_inference_on_image(image_data):
     #   encoding of the image.
     # Runs the softmax tensor by feeding the image_data as input to the graph.
 
-    softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
-    predictions = sess.run(softmax_tensor,
+    predictions = sess.run(sess.graph.get_tensor_by_name('softmax:0'),
                            {'DecodeJpeg/contents:0': image_data.read()})
     predictions = np.squeeze(predictions)
 
     # Creates node ID --> English string lookup.
-    node_lookup = NodeLookup()
 
     top_k = predictions.argsort()[-num_top_predictions:][::-1]
     for node_id in top_k:
