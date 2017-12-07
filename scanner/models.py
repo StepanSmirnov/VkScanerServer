@@ -23,8 +23,14 @@ class Person(models.Model):
     name = models.CharField(max_length=250)
     surname = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return "{} {}".format(self.name, self.surname)
 
 class Photo(models.Model):
     url = models.CharField(max_length=250)
     labels = models.TextField()
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return url
