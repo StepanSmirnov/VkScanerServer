@@ -199,7 +199,7 @@ def maybe_download_and_extract():
       default=5
   )
   FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+  # tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
   """Download and extract model tar file."""
   dest_directory = FLAGS.model_dir
   if not os.path.exists(dest_directory):
