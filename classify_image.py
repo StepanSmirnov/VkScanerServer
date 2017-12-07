@@ -49,7 +49,8 @@ import requests
 from io import BytesIO
 
 FLAGS = None
-
+model_dir = ""
+num_top_predictions = 5
 # pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
 # pylint: enable=line-too-long
@@ -63,10 +64,10 @@ class NodeLookup(object):
                uid_lookup_path=None):
     if not label_lookup_path:
       label_lookup_path = os.path.join(
-          FLAGS.model_dir, 'imagenet_2012_challenge_label_map_proto.pbtxt')
+          model_dir, 'imagenet_2012_challenge_label_map_proto.pbtxt')
     if not uid_lookup_path:
       uid_lookup_path = os.path.join(
-          FLAGS.model_dir, 'imagenet_synset_to_human_label_map.txt')
+          model_dir, 'imagenet_synset_to_human_label_map.txt')
     self.node_lookup = self.load(label_lookup_path, uid_lookup_path)
 
   def load(self, label_lookup_path, uid_lookup_path):
@@ -124,7 +125,7 @@ def create_graph():
   """Creates a graph from saved GraphDef file and returns a saver."""
   # Creates graph from saved graph_def.pb.
   with tf.gfile.FastGFile(os.path.join(
-      FLAGS.model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
+      model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
     _ = tf.import_graph_def(graph_def, name='')
@@ -167,7 +168,7 @@ def run_inference_on_image(image):
     # Creates node ID --> English string lookup.
     node_lookup = NodeLookup()
 
-    top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
+    top_k = predictions.argsort()[-num_top_predictions:][::-1]
     for node_id in top_k:
       human_string = node_lookup.id_to_string(node_id)
       score = predictions[node_id]
@@ -201,7 +202,7 @@ def maybe_download_and_extract():
   FLAGS, unparsed = parser.parse_known_args()
   # tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
   """Download and extract model tar file."""
-  dest_directory = FLAGS.model_dir
+  dest_directory = model_dir
   if not os.path.exists(dest_directory):
     os.makedirs(dest_directory)
   filename = DATA_URL.split('/')[-1]
@@ -221,7 +222,7 @@ def maybe_download_and_extract():
 def main(_):
   maybe_download_and_extract()
   image = (FLAGS.image_file if FLAGS.image_file else
-           os.path.join(FLAGS.model_dir, 'cropped_panda.jpg'))
+           os.path.join(model_dir, 'cropped_panda.jpg'))
   run_inference_on_image(image)
 
 
