@@ -171,7 +171,7 @@ def run_inference_on_image(image_data):
       human_string = node_lookup.id_to_string(node_id)
       score = predictions[node_id]
       # print('%s (score = %.5f)' % (human_string, score))
-      return human_string
+      return [human_string]
 
 
 def maybe_download_and_extract():
