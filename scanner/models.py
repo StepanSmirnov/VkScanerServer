@@ -33,7 +33,8 @@ class Photo(models.Model):
     url = models.CharField(max_length=250)
     labels = models.TextField()
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    
+
+@admin.register(Photo)    
 class PhotoAdmin(admin.ModelAdmin):
     
     list_display = ('url', 'labels', 'person', 'image')    
