@@ -33,4 +33,4 @@ class Photo(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     def __str__(self):
-        return url
+        return self.url
