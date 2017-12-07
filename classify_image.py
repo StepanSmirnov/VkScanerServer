@@ -47,9 +47,10 @@ import tensorflow as tf
 
 import requests
 from io import BytesIO
+from django.conf import settings
 
 FLAGS = None
-model_dir = "/models"
+model_dir = os.path.join(settings.BASE_DIR, "models")
 num_top_predictions = 5
 # pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
@@ -177,29 +178,6 @@ def run_inference_on_image(image):
 
 
 def maybe_download_and_extract():
-  parser = argparse.ArgumentParser()
-  # classify_image_graph_def.pb:
-  #   Binary representation of the GraphDef protocol buffer.
-  # imagenet_synset_to_human_label_map.txt:
-  #   Map from synset ID to a human readable string.
-  # imagenet_2012_challenge_label_map_proto.pbtxt:
-  #   Text representation of a protocol buffer mapping a label to synset ID.
-  parser.add_argument(
-      '--model_dir',
-      type=str,
-      default='/tmp/imagenet'
-  )
-  parser.add_argument(
-      '--image_file',
-      type=str,
-      default=''
-  )
-  parser.add_argument(
-      '--num_top_predictions',
-      type=int,
-      default=5
-  )
-  FLAGS, unparsed = parser.parse_known_args()
   # tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
   """Download and extract model tar file."""
   dest_directory = model_dir
