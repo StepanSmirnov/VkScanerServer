@@ -64,8 +64,8 @@ def create(request):
                 photo_labels = run_inference_on_image(BytesIO(response.content))
                 person.photo_set.create(url = url, labels = photo_labels)
             else:
-                photo_labels = person.photo_set.get(url=url).url
-            labels.append(photo_labels)
+                photo_labels = person.photo_set.get(url=url).labels
+            labels += (photo_labels)
         del person
         del grabber
         del urls
