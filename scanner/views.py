@@ -65,7 +65,7 @@ def create(request):
                 person.photo_set.create(url = url, labels = photo_labels)
             else:
                 photo_labels = person.photo_set.get(url=url).url
-            labels += photo_labels
+            labels.append(photo_labels)
         del person
         del grabber
         del urls
