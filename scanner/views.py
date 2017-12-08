@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from collections import Counter
+import json
 
 # Create your views here.
 def index(request):
@@ -62,10 +63,10 @@ def create(request):
             if (not person.photo_set.filter(url=url).exists()):
                 response = requests.get(url)
                 photo_labels = run_inference_on_image(BytesIO(response.content))
-                person.photo_set.create(url = url, labels = photo_labels)
+                person.photo_set.create(url = url, labels = json.dumps(photo_labels[0]))
             else:
-                photo_labels = person.photo_set.get(url=url).labels
-            labels += (photo_labels)
+                photo_labels = json.loads(person.photo_set.get(url=url).labels)
+            labels += photo_labels
         del person
         del grabber
         del urls

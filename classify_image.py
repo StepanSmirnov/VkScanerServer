@@ -163,9 +163,9 @@ def run_inference_on_image(image_data):
         # Creates node ID --> English string lookup.
 
         top_k = predictions.argsort()[-num_top_predictions:][::-1]
-        for node_id in top_k:
-            human_string = node_lookup.id_to_string(node_id)
-            score = predictions[node_id]
-            # print('%s (score = %.5f)' % (human_string, score))
-            return [human_string]
+        # for node_id in top_k:
+        #     human_string = node_lookup.id_to_string(node_id)
+        #     score = predictions[node_id]
+        #     # print('%s (score = %.5f)' % (human_string, score))
+        return [node_lookup.id_to_string(node_id) for node_id in top_k]
 
