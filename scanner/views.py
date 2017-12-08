@@ -59,12 +59,13 @@ def create(request):
         urls = grabber.loadPhotos(target_id)
         person.save()
         for url in urls:
-            response = requests.get(url)
-            photo = Photo(url=url, labels=run_inference_on_image(BytesIO(response.content)))
-            labels += photo.labels
             if (not person.photo_set.filter(url=url).exists()):
-                person.photo_set.add(photo, bulk=False)
-                photo.save()
+                response = requests.get(url)
+                photo_labels = run_inference_on_image(BytesIO(response.content))
+                person.photo_set.create(url = url, labels = photo_labels)
+            else:
+                photo_labels = person.photo_set.get(url=url).url
+            labels += photo_labels
             del photo
         del person
         del grabber
