@@ -54,16 +54,16 @@ def create(request):
             vkapi = vk.API(access_token=token, session = session)
             params = vkapi.users.get(user_ids=target_id)[0]
             person = Person(social_id=target_id, name=params["first_name"], surname=params["last_name"])
-
+        request.session["target_id"] = target_id
         grabber = PhotoGrabber(token)
         urls = grabber.loadPhotos(target_id)
         person.save()
         for url in urls:
             response = requests.get(url)
-            photo = person.photo_set.create(url=url, labels=run_inference_on_image(BytesIO(response.content)))
+            photo = Photo(url=url, labels=run_inference_on_image(BytesIO(response.content))
             labels += photo.labels
             if (not person.photo_set.filter(url=url).exists()):
-                photo.save()
+                person.photo_set.add(photo)
             del photo
         del person
         del grabber
@@ -88,5 +88,3 @@ def create(request):
     # response = HttpResponse(content_type='image/png')
     # image.save(response, 'PNG')
     return HttpResponse(imgdata.getvalue(), content_type='image/png')
-
-    # return render(request, 'show.html', context)
