@@ -62,8 +62,8 @@ def create(request):
         for url in urls:
             if (not person.photo_set.filter(url=url).exists()):
                 response = requests.get(url)
-                photo_labels = run_inference_on_image(BytesIO(response.content))
-                person.photo_set.create(url = url, labels = json.dumps(photo_labels[0]))
+                photo_labels = run_inference_on_image(BytesIO(response.content))[0]
+                person.photo_set.create(url = url, labels = json.dumps(photo_labels))
             else:
                 photo_labels = json.loads(person.photo_set.get(url=url).labels)
             labels += photo_labels
