@@ -7,6 +7,6 @@ class PhotoGrabber:
     def loadPhotos(self, owner_id = ""):
         session = vk.Session()
         vkapi = vk.API(access_token=self.token, session = session)
-        response = vkapi.photos.getAll(owner_id = vkapi.users.get(user_ids=owner_id)[0]["uid"])[1:]
+        response = vkapi.photos.getAll(owner_id = vkapi.users.get(user_ids=owner_id, count = 50, album_id="wall")[0]["uid"])[1:]
         return [url["src"] for url in response]
 
