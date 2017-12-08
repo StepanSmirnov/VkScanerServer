@@ -63,6 +63,7 @@ def create(request):
             photo = Photo(url=url, labels=run_inference_on_image(BytesIO(response.content)))
             labels += photo.labels
             if (not person.photo_set.filter(url=url).exists()):
+                photo.save()
                 person.photo_set.add(photo)
             del photo
         del person
