@@ -66,7 +66,7 @@ def create(request):
                 person.photo_set.create(url = url, labels = json.dumps(photo_labels[0]))
             else:
                 photo_labels = json.loads(person.photo_set.get(url=url).labels)
-            labels.append(photo_labels[0])
+            labels.append(photo_labels)
         del person
         del grabber
         del urls
