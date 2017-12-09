@@ -4,7 +4,7 @@ from scanner.models import Person
 from scanner.models import Photo
 # from django.contrib.auth import authenticate, login
 # from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 import requests
 import vk
