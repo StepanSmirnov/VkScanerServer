@@ -116,27 +116,27 @@ def scanPhoto(request):
     else:
         return JsonResponse({"status": "Done!"})
 
-    def makeChart(request):
-        target_id = request.session.get("target_id", "")
-        if target_id == "":
-            return HttpResponse("")
-        if not (Person.objects.filter(social_id=target_id).exists()):
-            return HttpResponse("")
+def makeChart(request):
+    target_id = request.session.get("target_id", "")
+    if target_id == "":
+        return HttpResponse("")
+    if not (Person.objects.filter(social_id=target_id).exists()):
+        return HttpResponse("")
 
-        person = Person.objects.get(social_id=target_id)
-        photos = person.photo_set.all()        
-        labels=[photo.labels for photo in photos]
+    person = Person.objects.get(social_id=target_id)
+    photos = person.photo_set.all()        
+    labels=[photo.labels for photo in photos]
 
-        c = Counter(labels)
-        del labels
-        fig1 = plt.figure()
-        ax1 = fig1.add_subplot(111)
-        ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+    c = Counter(labels)
+    del labels
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
 
-        imgdata = BytesIO()
+    imgdata = BytesIO()
 
-        fig1.savefig(imgdata, format='png')
-        imgdata.seek(0)  # rewind the data
-        plt.close()   
+    fig1.savefig(imgdata, format='png')
+    imgdata.seek(0)  # rewind the data
+    plt.close()   
 
-        return HttpResponse(imgdata.getvalue(), content_type='image/png') 
+    return HttpResponse(imgdata.getvalue(), content_type='image/png') 
