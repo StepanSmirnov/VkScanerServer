@@ -90,7 +90,7 @@ def create(request):
     # response = HttpResponse(content_type='image/png')
     # image.save(response, 'PNG')
     # return HttpResponse(imgdata.getvalue(), content_type='image/png')
-    return render(request, "scanner/show.html")
+    return render(request, "show.html")
 
 def scanPhoto(request):
     target_id = request.session.get("target_id", "")
