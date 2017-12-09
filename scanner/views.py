@@ -18,6 +18,7 @@ from matplotlib import pyplot as plt
 from collections import Counter
 import json
 
+empty_label="-empty-"
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -62,7 +63,7 @@ def create(request):
         for url in urls:
             if (not person.photo_set.filter(url=url).exists()):
                 response = requests.get(url)
-                photo_labels = "-empty"#run_inference_on_image(BytesIO(response.content))[0]
+                photo_labels = empty_label#run_inference_on_image(BytesIO(response.content))[0]
                 person.photo_set.create(url = url, labels = json.dumps(photo_labels))
             else:
                 photo_labels = json.loads(person.photo_set.get(url=url).labels)
@@ -102,8 +103,8 @@ def scanPhoto(request):
     person = Person.objects.get(social_id=target_id)
     photos_count = person.photo_set.count()
 
-    if person.photo_set.filter(labels="-empty-").exists():
-        photo = person.photo_set.get(labels="-empty-")
+    if person.photo_set.filter(labels=empty_label).exists():
+        photo = person.photo_set.get(labels=empty_label)
 
         response = requests.get(photo.url)
         photo.labels=run_inference_on_image(BytesIO(response.content))
