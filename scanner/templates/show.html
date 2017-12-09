@@ -2,10 +2,18 @@
 
 {% block javascript %}
 <script>
-    // var timer = setTimeout(nextPhoto, 1000);
+    function makeChart(){
+        $.ajax({
+            url: "{% url 'scanner:make_chart' %}",
+            dataType: 'html',
+            success: function (data) {
+                $("body").html(data);
+            }
+        }); 
+    }
     function nextPhoto(){
         $.ajax({
-            url: "{% url 'scanner:scan_photo'  %}",
+            url: "{% url 'scanner:scan_photo' %}",
             dataType: 'json',
             success: function (data) {
             if (data.status="Done!") {
@@ -17,10 +25,8 @@
         });
 
     }
-    function abortTimer() { // to be called when you want to stop the timer
-        clearInterval(timer);
-    }
-    nextPhoto()
+    nextPhoto();
+
 </script>
 {% endblock %}
 

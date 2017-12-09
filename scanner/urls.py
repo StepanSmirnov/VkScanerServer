@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^scan/$', views.create, name='scan'),
     url(r'^ajax/scan_photo/$', views.scanPhoto, name='scan_photo'),
+    url(r'^ajax/make_chart/$', views.makeChart, name='make_chart'),
 ]
