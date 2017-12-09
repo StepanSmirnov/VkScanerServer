@@ -1,4 +1,29 @@
 {% extends "base.html" %}
+
+{% block javascript %}
+<script>
+    // var timer = setTimeout(nextPhoto, 1000);
+    function nextPhoto(){
+        $.ajax({
+            url: '/ajax/scan_photo/',
+            dataType: 'json',
+            success: function (data) {
+            if (data.status="Done!") {
+                alert(data.status);
+            }
+            else
+                nextPhoto();
+            }
+        });
+
+    }
+    function abortTimer() { // to be called when you want to stop the timer
+        clearInterval(timer);
+    }
+    nextPhoto()
+</script>
+{% endblock %}
+
 {% block content %}
 <img src="{{chart_src}}" alt="Chart">
 {% endblock %}

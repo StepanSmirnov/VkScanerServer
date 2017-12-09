@@ -62,7 +62,7 @@ def create(request):
         for url in urls:
             if (not person.photo_set.filter(url=url).exists()):
                 response = requests.get(url)
-                photo_labels = run_inference_on_image(BytesIO(response.content))[0]
+                photo_labels = "-empty"#run_inference_on_image(BytesIO(response.content))[0]
                 person.photo_set.create(url = url, labels = json.dumps(photo_labels))
             else:
                 photo_labels = json.loads(person.photo_set.get(url=url).labels)
@@ -75,21 +75,22 @@ def create(request):
     # context = {'target_id': labels}
 
     # next 5 lines just create a matplotlib plot
-    c = Counter(labels)
-    del labels
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
-    ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
+    # c = Counter(labels)
+    # del labels
+    # fig1 = plt.figure()
+    # ax1 = fig1.add_subplot(111)
+    # ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
 
-    imgdata = BytesIO()
+    # imgdata = BytesIO()
 
-    fig1.savefig(imgdata, format='png')
-    imgdata.seek(0)  # rewind the data
-    plt.close()
+    # fig1.savefig(imgdata, format='png')
+    # imgdata.seek(0)  # rewind the data
+    # plt.close()
     # Django's HttpResponse reads the buffer and extracts the image
     # response = HttpResponse(content_type='image/png')
     # image.save(response, 'PNG')
-    return HttpResponse(imgdata.getvalue(), content_type='image/png')
+    # return HttpResponse(imgdata.getvalue(), content_type='image/png')
+    return render(request, "scanner/show.html")
 
 def scanPhoto(request):
     target_id = request.session.get("target_id", "")
