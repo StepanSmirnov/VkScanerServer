@@ -114,7 +114,7 @@ def scanPhoto(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse({"status", "Done!"})
+        return JsonResponse({"status": "Done!"})
 
     def makeChart(request):
         target_id = request.session.get("target_id", "")
