@@ -19,6 +19,8 @@
             if (data.status=="Done!") {
                 alert(data.status)
                 makeChart();
+                $(script).html("");
+                $(script).text("");
             }
             else
                 alert(data.status);
