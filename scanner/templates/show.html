@@ -7,7 +7,7 @@
             url: "{% url 'scanner:make_chart' %}",
             dataType: 'html',
             success: function (data) {
-                $("body").html($("<img>").attr("src", "{% url 'scanner:make_chart' %}"));
+                $("img").attr("src", "{% url 'scanner:make_chart' %}");
             }
         }); 
     }

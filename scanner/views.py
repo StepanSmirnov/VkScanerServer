@@ -81,7 +81,7 @@ def scanPhoto(request):
         photo = person.photo_set.filter(labels=empty_label)[0]
 
         response = requests.get(photo.url)
-        photo.labels=run_inference_on_image(BytesIO(response.content))
+        photo.labels=run_inference_on_image(BytesIO(response.content))[0]
         photo.save()
         username = request.GET.get('username', None)
         data = {
