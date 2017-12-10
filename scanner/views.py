@@ -103,7 +103,7 @@ def scanPhoto(request):
     person = Person.objects.get(social_id=target_id)
     photos_count = person.photo_set.count()
 
-    if person.photo_set.filter(labels=empty_label):
+    if person.photo_set.filter(labels=json.dumps(empty_label)):
         photo = person.photo_set.filter(labels=empty_label)[0]
 
         response = requests.get(photo.url)
