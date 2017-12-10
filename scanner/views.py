@@ -104,7 +104,7 @@ def scanPhoto(request):
     photos_count = person.photo_set.count()
 
     if person.photo_set.filter(labels=json.dumps(empty_label)):
-        photo = person.photo_set.filter(labels=empty_label)[0]
+        photo = person.photo_set.filter(labels=json.dumps(empty_label))[0]
 
         response = requests.get(photo.url)
         photo.labels=run_inference_on_image(BytesIO(response.content))
