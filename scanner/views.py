@@ -1,16 +1,12 @@
 from django.shortcuts import render
-# from django.contrib.auth.models import UserUser
-from scanner.models import Person
-from scanner.models import Photo
-# from django.contrib.auth import authenticate, login
-# from django.contrib.auth.decorators import login_required
+from scanner.models import Person, Photo
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 import requests
 import vk
 from io import BytesIO
 from photoGrabber import PhotoGrabber
-# from object_detection_tutorial import scanImage
 from classify_image import run_inference_on_image
 import matplotlib
 matplotlib.use('Agg')
@@ -46,7 +42,6 @@ def login(request):
 
 def create(request):
     token = request.session.get("access_token", "")
-    labels = []
     target_id = request.POST['target_id']
     if token != "":
         if (Person.objects.filter(social_id=target_id).exists()):
@@ -64,33 +59,14 @@ def create(request):
             if (not person.photo_set.filter(url=url).exists()):
                 response = requests.get(url)
                 photo_labels = empty_label#run_inference_on_image(BytesIO(response.content))[0]
-                person.photo_set.create(url = url, labels = json.dumps(photo_labels))
+                person.photo_set.create(url = url, labels = photo_labels)
             else:
                 photo_labels = json.loads(person.photo_set.get(url=url).labels)
-            labels.append(photo_labels)
         del person
         del grabber
         del urls
         del token
         del target_id
-    # context = {'target_id': labels}
-
-    # next 5 lines just create a matplotlib plot
-    # c = Counter(labels)
-    # del labels
-    # fig1 = plt.figure()
-    # ax1 = fig1.add_subplot(111)
-    # ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
-
-    # imgdata = BytesIO()
-
-    # fig1.savefig(imgdata, format='png')
-    # imgdata.seek(0)  # rewind the data
-    # plt.close()
-    # Django's HttpResponse reads the buffer and extracts the image
-    # response = HttpResponse(content_type='image/png')
-    # image.save(response, 'PNG')
-    # return HttpResponse(imgdata.getvalue(), content_type='image/png')
     return render(request, "show.html")
 
 def scanPhoto(request):
@@ -102,16 +78,18 @@ def scanPhoto(request):
 
     person = Person.objects.get(social_id=target_id)
     photos_count = person.photo_set.count()
-
-    if person.photo_set.filter(labels=json.dumps(empty_label)):
-        photo = person.photo_set.filter(labels=json.dumps(empty_label))[0]
+    scaned_count = person.photo_set.filter(~Q(labels=empty_label))
+    if person.photo_set.filter(labels=empty_label):
+        photo = person.photo_set.filter(labels=empty_label)[0]
 
         response = requests.get(photo.url)
         photo.labels=run_inference_on_image(BytesIO(response.content))
         photo.save()
         username = request.GET.get('username', None)
         data = {
-            'status': "Processing..."
+            'status': "Processing...",
+            "value" : scaned_count,
+            "max" : photos_count
         }
         return JsonResponse(data)
     else:
@@ -140,4 +118,5 @@ def makeChart(request):
     imgdata.seek(0)  # rewind the data
     plt.close()   
 
-    return JsonResponse({"labels": labels}) 
+    # return JsonResponse({"labels": labels}) 
+    return HttpResponse(imgdata.getvalue(), content_type='image/png')

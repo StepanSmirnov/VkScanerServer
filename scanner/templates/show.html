@@ -7,7 +7,7 @@
             url: "{% url 'scanner:make_chart' %}",
             dataType: 'html',
             success: function (data) {
-                $("body").html(data);
+                $("body").html($("<img>").attr("src", "{% url 'scanner:make_chart' %}"));
             }
         }); 
     }
@@ -16,14 +16,12 @@
             url: "{% url 'scanner:scan_photo' %}",
             dataType: 'json',
             success: function (data) {
-            if (data["status"]=="200") {
-                alert(data.status)
+            if (data.status=="200") {
+                $("progress").remove();
                 makeChart();
-                $(script).html("");
-                $(script).text("");
             }
             else
-                alert(data.status);
+                $("progress").attr("max", data.max).attr("value", data.value);
                 nextPhoto();
             }
         });
@@ -35,6 +33,7 @@
 {% endblock %}
 
 {% block content %}
-<img src="{{chart_src}}" alt="Chart">
+<img src="{{chart_src}}" alt="">
+<progress></progress>
 <p></p>
 {% endblock %}
