@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 from collections import Counter
 import json
 
-empty_label="-empty-"
+empty_label=json.dumps("-empty-")
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -118,5 +118,4 @@ def makeChart(request):
     imgdata.seek(0)  # rewind the data
     plt.close()   
 
-    # return JsonResponse({"labels": labels}) 
     return HttpResponse(imgdata.getvalue(), content_type='image/png')
