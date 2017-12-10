@@ -129,7 +129,7 @@ def makeChart(request):
     labels=[photo.labels for photo in photos]
 
     c = Counter(labels)
-    del labels
+    labels
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1.pie(c.values(), labels=c.keys(), autopct='%1.1f%%', shadow=True, startangle=90)
