@@ -76,7 +76,7 @@ def scanPhoto(request):
 
     person = Person.objects.get(social_id=target_id)
     photos_count = person.photo_set.count()
-    scaned_count = person.photo_set.filter(~Q(labels=empty_label))
+    scaned_count = person.photo_set.filter(~Q(labels=empty_label)).count();
     if person.photo_set.filter(labels=empty_label):
         photo = person.photo_set.filter(labels=empty_label)[0]
 
