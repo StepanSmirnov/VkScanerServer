@@ -7,7 +7,7 @@
             url: "{% url 'scanner:make_chart' %}",
             dataType: 'html',
             success: function (data) {
-                $("body").html($("<img>").attr("src", "{% url 'scanner:make_chart' %}"));
+                $("body").html(data);
             }
         }); 
     }
@@ -16,7 +16,7 @@
             url: "{% url 'scanner:scan_photo' %}",
             dataType: 'json',
             success: function (data) {
-            if (data.status=="Done!") {
+            if (data["status"]=="200") {
                 alert(data.status)
                 makeChart();
                 $(script).html("");

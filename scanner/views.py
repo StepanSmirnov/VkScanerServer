@@ -115,7 +115,7 @@ def scanPhoto(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse({"status": "Done!"})
+        return JsonResponse({"status": "200"})
 
 def makeChart(request):
     target_id = request.session.get("target_id", "")
@@ -140,4 +140,4 @@ def makeChart(request):
     imgdata.seek(0)  # rewind the data
     plt.close()   
 
-    return HttpResponse(imgdata.getvalue(), content_type='image/png') 
+    return JsonResponse({"labels": labels}) 
