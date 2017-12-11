@@ -117,3 +117,6 @@ def makeChart(request):
     plt.close()   
 
     return HttpResponse(imgdata.getvalue(), content_type='image/png')
+
+def about(request):
+    return render(request, 'about.html')

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 <div class="row main">
     <div class="col-md12">
         <h1>
@@ -13,10 +14,10 @@
         </p>
 
         <div class="row carusel text-center">
-            <div class="col-md-3 text-center"><img src="img/carusel-1.jpg"></div>
-            <div class="col-md-3 text-center"><img src="img/carusel-1.jpg"></div>
-            <div class="col-md-3 text-center"><img src="img/carusel-1.jpg"></div>
-            <div class="col-md-3 text-center"><img src="img/carusel-1.jpg"></div>
+            <div class="col-md-3 text-center"><img src="{% static "img/carusel-1.jpg" %}"></div>
+            <div class="col-md-3 text-center"><img src="{% static "img/carusel-1.jpg" %}"></div>
+            <div class="col-md-3 text-center"><img src="{% static "img/carusel-1.jpg" %}"></div>
+            <div class="col-md-3 text-center"><img src="{% static "img/carusel-1.jpg" %}"></div>
         </div>
 
         <p>
